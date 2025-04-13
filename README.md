@@ -10,22 +10,21 @@ Ensure you have the following installed:
 - [Git](https://git-scm.com/) (optional, for version control)
 
 ## 📂 Project Structure
-
+```
 /drum-kit-project 
-
 │── index.html # Main HTML file 
 │── styles.css # CSS file for styling the project 
 │── index.js # JavaScript file for interactivity 
 │── sounds/ # Directory containing drum sound files (e.g., tom-1.mp3, snare.mp3, etc.) 
 │── images/ # Directory containing images for the drum buttons 
 │── README.md # Project documentation
-
+```
 
 ## 🚀 Installation & Setup
 1. **Clone the repository**
     ```sh
-    git clone https://github.com/M677871/-Drump-.git
-    cd drum-kit-project
+    git clone https://github.com/M677871/web-drumkit.git
+    cd web-drumkit
     ```
 
 2. **Open the Project**
