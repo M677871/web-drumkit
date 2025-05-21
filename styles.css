@@ -1,76 +1,233 @@
+/* styles.css */
+
+/* 1. Theme Variables */
+:root {
+  --bg-start: #1f2a44;
+  --bg-end:   #283149;
+  --accent:   #d20909;
+  --light:    #DBEDF3;
+  --shadow:   rgba(0, 0, 0, 0.2);
+  --radius:   1rem;
+  --transition: 0.2s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  font-family: "Arvo", serif;
+  color: var(--light);
   text-align: center;
-  background-color: #283149;
+  padding: 2rem;
 }
 
 h1 {
-  font-size: 5rem;
-  color: #DBEDF3;
-  font-family: "Arvo", cursive;
-  text-shadow: 3px 0 #DA0463;
-
+  font-size: 4rem;
+  text-shadow: 2px 2px var(--shadow);
+  margin-bottom: 1rem;
 }
 
-footer {
-  color: #DBEDF3;
-  font-family: sans-serif;
-}
-
-.w {
-  background-image: url("images/tom1.png");
-}
-
-.a {
-  background-image: url("images/tom2.png");
-}
-
-.s {
-  background-image: url("images/tom3.png");
-}
-
-.d {
-  background-image: url("images/tom4.png");
-}
-
-.j {
-  background-image: url("images/snare.png");
-}
-
-.k {
-  background-image: url("images/crash.png");
-}
-
-.l {
-  background-image: url("images/kick.png");
-}
-
+/* 2. Drum Grid */
 .set {
-  margin: 10% auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 1rem;
+}
+
+/* 3. Neumorphic-style Drum Buttons */
+.drum {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--bg-end);
+  box-shadow: 
+    6px 6px 10px var(--shadow),
+   -6px -6px 10px rgba(255,255,255,0.1);
+  color: var(--accent);
+  font-size: 2.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  overflow: hidden;
+}
+
+.drum::before {
+  /* subtle gradient highlight */
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 60%);
+  transform: rotate(25deg);
+  transition: opacity var(--transition);
+  opacity: 0;
+}
+
+.drum:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    8px 8px 15px var(--shadow),
+   -8px -8px 15px rgba(255,255,255,0.1);
+}
+
+.drum:hover::before {
+  opacity: 1;
 }
 
 .pressed {
-  box-shadow: 0 3px 4px 0 #DBEDF3;
-  opacity: 0.5;
+  animation: press 0.1s ease-out forwards;
 }
 
-.red {
-  color: red;
+@keyframes press {
+  to {
+    transform: scale(0.9);
+    box-shadow: inset 4px 4px 6px var(--shadow),
+                inset -4px -4px 6px rgba(255,255,255,0.1);
+  }
+}
+
+/* 4. Footer */
+footer {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-top: 2rem;
+}
+:root {
+  --bg-start: #0f172a;
+  --bg-end: #1e293b;
+  --accent: #d20909;
+  --light: #f8fafc;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --radius: 1.5rem;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+  font-family: 'Arvo', system-ui, sans-serif;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  font-size: 4.5rem;
+  background: linear-gradient(45deg, var(--accent), #d20909);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 4px 6px var(--shadow);
+  margin-bottom: 2rem;
+  position: relative;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.set {
+  gap: 2rem;
+  padding: 2rem;
+  backdrop-filter: blur(16px);
+  background: var(--glass);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px var(--shadow);
+  margin: 2rem auto;
 }
 
 .drum {
-  outline: none;
-  border: 10px solid #404B69;
-  font-size: 5rem;
-  font-family: 'Arvo', cursive;
-  line-height: 2;
-  font-weight: 900;
-  color: #DA0463;
-  text-shadow: 3px 0 #DBEDF3;
-  border-radius: 15px;
-  display: inline-block;
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  margin: 10px;
-  background-color: white;
+  background: linear-gradient(145deg, var(--bg-start), var(--bg-end));
+  box-shadow: 
+    8px 8px 16px var(--shadow),
+    -8px -8px 16px rgba(255, 255, 255, 0.05);
+  color: var(--accent);
+  font-size: 2.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--transition);
+}
+
+.drum::before {
+  background: radial-gradient(circle at center, rgba(236,72,153,0.2), transparent 70%);
+}
+
+.drum:hover {
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 
+    12px 12px 24px var(--shadow),
+    -12px -12px 24px rgba(255, 255, 255, 0.05);
+}
+
+.drum:active {
+  transform: translateY(2px);
+}
+
+.pressed {
+  animation: press 0.2s ease-out forwards;
+  background: linear-gradient(145deg, var(--bg-end), var(--bg-start));
+}
+
+@keyframes press {
+  to {
+    box-shadow: 
+      inset 4px 4px 8px var(--shadow),
+      inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+  }
+}
+
+footer {
+  background: var(--glass);
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+  
+  .set {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .drum {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  .set {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+  }
 }

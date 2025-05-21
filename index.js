@@ -1,81 +1,79 @@
-var numberOfDrumButtons = document.querySelectorAll(".drum").length;
 
-for (var i = 0; i < numberOfDrumButtons; i++) {
+(() => {
+  
+  const SOUND_MAP = {
+    w: 'sounds/tom-1.mp3',
+    a: 'sounds/tom-2.mp3',
+    s: 'sounds/tom-3.mp3',
+    d: 'sounds/tom-4.mp3',
+    j: 'sounds/snare.mp3',
+    k: 'sounds/crash.mp3',
+    l: 'sounds/kick-bass.mp3'
+  };
 
-  document.querySelectorAll(".drum")[i].addEventListener("click", function() {
+  
+  const audioCache = new Map();
 
-    var buttonInnerHTML = this.innerHTML;
+  const preloadAudio = async () => {
+    const entries = Object.entries(SOUND_MAP);
+    await Promise.all(entries.map(async ([key, src]) => {
+      const audio = new Audio(src);
+      await new Promise((res, rej) => {
+        audio.addEventListener('canplaythrough', res, { once: true });
+        audio.addEventListener('error', () => rej(src), { once: true });
+      });
+      audioCache.set(key, audio);
+    }));
+  };
 
-    makeSound(buttonInnerHTML);
+  const playSound = (key) => {
+    const audio = audioCache.get(key);
+    if (!audio) {
+      console.warn(`No sound mapped for key: "${key}"`);
+      return;
+    }
+    audio.currentTime = 0;
+    audio.play().catch(err => console.error('Playback error:', err));
+  };
 
-    buttonAnimation(buttonInnerHTML);
+ 
+  const animateButton = (key) => {
+    const btn = document.querySelector(`.drum[data-key="${key}"]`);
+    if (!btn) return;
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 100);
+  };
 
+  
+
+
+  const trigger = (key) => {
+    key = key.toLowerCase();
+    if (!SOUND_MAP[key]) return;
+    playSound(key);
+    animateButton(key);
+  };
+
+  
+  const onClick = (e) => {
+    const btn = e.target.closest('.drum');
+    if (!btn) return;
+    trigger(btn.dataset.key);
+  };
+
+ 
+  const onKeydown = (e) => {
+    trigger(e.key);
+  };
+
+  
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      await preloadAudio();
+    } catch (src) {
+      console.error('Failed to load:', src);
+    }
+    document.body.addEventListener('click', onClick);
+    document.addEventListener('keydown', onKeydown);
   });
-
-}
-
-document.addEventListener("keypress", function(event) {
-
-  makeSound(event.key);
-
-  buttonAnimation(event.key);
-
-});
-
-
-function makeSound(key) {
-
-  switch (key) {
-    case "w":
-      var tom1 = new Audio("sounds/tom-1.mp3");
-      tom1.play();
-      break;
-
-    case "a":
-      var tom2 = new Audio("sounds/tom-2.mp3");
-      tom2.play();
-      break;
-
-    case "s":
-      var tom3 = new Audio('sounds/tom-3.mp3');
-      tom3.play();
-      break;
-
-    case "d":
-      var tom4 = new Audio('sounds/tom-4.mp3');
-      tom4.play();
-      break;
-
-    case "j":
-      var snare = new Audio('sounds/snare.mp3');
-      snare.play();
-      break;
-
-    case "k":
-      var crash = new Audio('sounds/crash.mp3');
-      crash.play();
-      break;
-
-    case "l":
-      var kick = new Audio('sounds/kick-bass.mp3');
-      kick.play();
-      break;
-
-
-    default: console.log(key);
-
-  }
-}
-
-
-function buttonAnimation(currentKey) {
-
-  var activeButton = document.querySelector("." + currentKey);
-
-  activeButton.classList.add("pressed");
-
-  setTimeout(function() {
-    activeButton.classList.remove("pressed");
-  }, 100);
-
-}
+})();
